@@ -1,6 +1,6 @@
 ---
 title: Virtuallization
-date: 2023-01-02 23:23:00 +09:00
+date: 2023-01-01 23:23:00 +09:00
 categories: [Virtuallization, Hypervisor]
 tags: [Virtuallization]		# TAG는 반드시 소문자로 이루어져야함!
 ---
