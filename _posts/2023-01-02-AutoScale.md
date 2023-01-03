@@ -1,7 +1,7 @@
 ---
 title: [KT클라우드]오토 스케일링
 date: 2023-01-02 23:23:00 +09:00
-categories: [클라우드, auto scale]
+categories: [클라우드, AutoScale]
 tags: [autoscale]		# TAG는 반드시 소문자로 이루어져야함!
 ---
 
