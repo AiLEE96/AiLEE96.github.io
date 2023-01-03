@@ -1,5 +1,5 @@
 ---
-title: [KT클라우드]cloudBerry
+title: (KT클라우드)cloudBerry
 date: 2023-01-02 23:23:00 +09:00
 categories: [클라우드, cloudBerry]
 tags: [cloudBerry]		# TAG는 반드시 소문자로 이루어져야함!
