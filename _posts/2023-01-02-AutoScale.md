@@ -9,17 +9,17 @@ tags: [autoscale]		# TAG는 반드시 소문자로 이루어져야함!
 
 ```
 ```
-![install01](/img/img/KTcoud/AutoScale/AC01.png)
+![install01](/assets/img/KTcoud/AutoScale/AC01.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC02.png)
+![install01](/assets/img/KTcoud/AutoScale/AC02.png)
 
 ```
  설정이름 - 위치 - OS - 디스크 선택, 이때 USER DATA를 통해서 오토스케일링 그룹에 의해서 생성 되어진 서버가 시작 되면서 특정한 명령들을 실행시킬 수 있다.
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC03.png)
+![install01](/assets/img/KTcoud/AutoScale/AC03.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC04.png)
+![install01](/assets/img/KTcoud/AutoScale/AC04.png)
 
 ```
  빨간색 박스들은 필수로 입력 해야되는 요소들.
@@ -34,44 +34,44 @@ tags: [autoscale]		# TAG는 반드시 소문자로 이루어져야함!
  210.106.106.17:1001 = 2번 서버
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC05.png)
+![install01](/assets/img/KTcoud/AutoScale/AC05.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC06.png)
+![install01](/assets/img/KTcoud/AutoScale/AC06.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC07.png)
+![install01](/assets/img/KTcoud/AutoScale/AC07.png)
 
 ```
  알림 설정 - 대상 이벤트에서 원하는 이벤트 선택 - 전달 방법(프로토콜) 선택.
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC08.png)
+![install01](/assets/img/KTcoud/AutoScale/AC08.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC09.png)
+![install01](/assets/img/KTcoud/AutoScale/AC09.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC11.png)
+![install01](/assets/img/KTcoud/AutoScale/AC11.png)
 
 ```
  오토 스케일링 그룹에 의해서 생성 된 서버 확인.
 ```
-![install01](/img/img/KTcoud/AutoScale/AC12.png)
+![install01](/assets/img/KTcoud/AutoScale/AC12.png)
 
 ```
  KT 클라우드의 오토 스케일링은 반드시 트리서 설정이 되어 있어야 진행이 된다.
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC13.png)
+![install01](/assets/img/KTcoud/AutoScale/AC13.png)
 
-![install01](/img/img/KTcoud/AutoScale/AC14.png)
+![install01](/assets/img/KTcoud/AutoScale/AC14.png)
 
  대상 매트릭 선택(서버, OS, 스펙, 개별, 오토 스케일링 그룹별) - 기준으로 삼을 자원을 선택 - 수집 주기 선택
 
-![install01](/img/img/KTcoud/AutoScale/AC15.png)
+![install01](/assets/img/KTcoud/AutoScale/AC15.png)
 
 ```
  알림 발생 조건 설정, 해당 조건을 기준으로 설정한 임계값을 넘어가는 경우 알람이 발생하고 서버가 생성된다.
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC16.png)
+![install01](/assets/img/KTcoud/AutoScale/AC16.png)
 
 ```
  정책에는 스케일 IN, 스케일 OUT 2가지가 존재.
@@ -81,6 +81,6 @@ tags: [autoscale]		# TAG는 반드시 소문자로 이루어져야함!
  만약 IN만 생성 했다면 줄어 들기만 하고 생성은 안되며 OUT만 설정했다면 늘어 나기만 하고 줄어들진 않는다.
 ```
 
-![install01](/img/img/KTcoud/AutoScale/AC17.png)
+![install01](/assets/img/KTcoud/AutoScale/AC17.png)
 
 
