@@ -14,20 +14,20 @@ lang: en
 
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Seoul
+timezone: Asia/Shanghai
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: 테스트                         # the main title
+title: Chirpy                          # the main title
 
-tagline: 테스트 입니다.  # it will display as the sub-title
+tagline: A text-focused Jekyll theme   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   A minimal, responsive, and powerful Jekyll theme for presenting professional writing.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: 'https://AiLEE96.github.io'
+url: ''
 
 github:
   username: github_username             # change to your github username
@@ -78,7 +78,7 @@ theme_mode:   # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: ''
+img_cdn: 'https://chirpy-img.netlify.app'
 
 # the avatar on sidebar, support local or CORS resources
 avatar: '/commons/avatar.jpg'
