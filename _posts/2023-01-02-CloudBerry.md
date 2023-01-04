@@ -13,33 +13,33 @@ tags: [cloudBerry]		# TAG는 반드시 소문자로 이루어져야함!
 
 cb(cloudberry)를 사용하기 위해선 기본적으로 Object storage2.0이 필수적으로 존재해야 하며(KT클라우드를 사용하는 사용자들의 경우) CDN과 연계하여 사용할 수 있다.
 ```
- ![install01](/assets/img/KTcoud/cloudBerry/베리01.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by01.png)
 
  ```
- KT메뉴얼 - KT Cloud storage 2.0 - 클라우드 베리 이용가이드 및 다운로드 
+ KT메뉴얼 - KT Cloud storage 2.0 - 클라우드 by 이용가이드 및 다운로드 
  ```
 
- ![install01](/assets/img/KTcoud/cloudBerry/베리02.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by02.png)
 
- ![install01](/assets/img/KTcoud/cloudBerry/베리03.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by03.png)
 
  ```
- 클라우드 베리 다운로드를 클릭하고 설치 된 툴을 실행, 해당 화면에서 소스 컴퓨터를 확인.
+ 클라우드 by 다운로드를 클릭하고 설치 된 툴을 실행, 해당 화면에서 소스 컴퓨터를 확인.
  ```
 
- ![install01](/assets/img/KTcoud/cloudBerry/베리04.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by04.png)
  
  ```
  새로운 계정(Object stroage2.0)을 추가해준다.
  ```
 
- ![install01](/assets/img/KTcoud/cloudBerry/베리05.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by05.png)
 
  ```
  KT클라우드 오브젝트 스토리지 2.0은 클라우드 스택기반, 오픈스택 클릭
  ```
 
- ![install01](/assets/img/KTcoud/cloudBerry/베리06.png)
+ ![install01](/assets/img/KTcoud/cloudBerry/by06.png)
 
  ```
  입력할 시에 주의해야할 사항.
@@ -91,8 +91,8 @@ cb(cloudberry)를 사용하기 위해선 기본적으로 Object storage2.0이 �
 스토리지를 생성하고 스토리지 탭에 API 키에 들어가 보면 키들이 발급 된 것을 확인할 수 있다.
 ```
 
-![install01](/assets/img/KTcoud/cloudBerry/베리08.png)
-![install01](/assets/img/KTcoud/cloudBerry/베리09.png)
+![install01](/assets/img/KTcoud/cloudBerry/by08.png)
+![install01](/assets/img/KTcoud/cloudBerry/by09.png)
 
 ```
 생성된 키를 양식에 맞춰서 집어 넣게 되면 test02라는 이름을 가진 Display name을 확인할 수 있다.
