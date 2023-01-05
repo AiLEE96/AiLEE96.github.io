@@ -44,15 +44,15 @@ cb(cloudberry)를 사용하기 위해선 기본적으로 Object storage2.0이 �
  
  입력할 시에 주의해야할 사항.
 
- 이용가이드에 명시가 되어있지만 한번 더 설명 하자면 </br>
- ㅁ Display name : CloudBerry에서 표시될 이름 </br>
- ㅁ User name : 사용자 이메일 </br>
- ㅁ Api key : 계정의 API key </br>
- ㅁ Authentication Service: https://ssproxy2.ucloudbiz.olleh.com:5000/v3 </br>
- ㅁ Keystone version: 3으로 선택 </br>
- ㅁ Use scope: 해당 체크박스 체크 </br>
- ㅁ Domain ID: 사용자 계정의 domain ID 입력 </br>
- ㅁ Project ID: 사용자 계정의 project ID 입력 </br>
+ 이용가이드에 명시가 되어있지만 한번 더 설명 하자면 <br/>
+ ㅁ Display name : CloudBerry에서 표시될 이름 <br/>
+ ㅁ User name : 사용자 이메일 <br/>
+ ㅁ Api key : 계정의 API key <br/>
+ ㅁ Authentication Service: https://ssproxy2.ucloudbiz.olleh.com:5000/v3 <br/>
+ ㅁ Keystone version: 3으로 선택 <br/>
+ ㅁ Use scope: 해당 체크박스 체크 <br/>
+ ㅁ Domain ID: 사용자 계정의 domain ID 입력 <br/>
+ ㅁ Project ID: 사용자 계정의 project ID 입력 <br/>
 
  주의 : Authentication Service는 꼭 메뉴얼에서 제공하는 url을 입력할 것, Use scope를 체크하면 생성되는 박스는 Domain name, Project name 으로 표시되기 때문에 이 두개를 꼭 ID로 변경해서 진행할 것.
 
