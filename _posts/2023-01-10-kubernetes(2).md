@@ -38,5 +38,4 @@ ERRO[0000] unable to determine image API version: rpc error: code = Unavailable 
 crictl config runtime-endpoint unix:///run/containerd/containerd.sock
 
 crictl config image-endpoint unix:///run/containerd/containerd.sock
-
 ```

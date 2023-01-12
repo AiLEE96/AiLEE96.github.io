@@ -29,8 +29,8 @@ EOF
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 
-sudo yum install -y kubelet-1.25.0 kubeadm-1.25.0 kubectl-1.25.0 ---disableexcludes=kubernetes
-kuneadm init # 에러 발생
+sudo yum install -y kubelet-1.25.0 kubeadm-1.25.0 kubectl-1.25.0 --disableexcludes=kubernetes
+kubeadm init # 에러 발생
 ```
 ```
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
@@ -96,6 +96,7 @@ vi /etc/containerd/config.toml
 E0110 11:26:48.039705   32064 memcache.go:238] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp [::1]:8080: connect: connection refused
 The connection to the server localhost:8080 was refused - did you specify the right host or port?
 
+[마스터에서만 실행]
 export KUBECONFIG=/etc/kubernetes/admin.conf # 단 리부팅 시 해당 오류가 다시 발생한다. 따라서 재시작을 해도 문제가 없도록 아래 명령어를 추가로 입력.
 
 vi ~/.bash_profile
@@ -133,4 +134,11 @@ cni flannel CrashLoopBackOff 해결
 ```No resources found in ingress-ngninx namespace.
 
 Ingress Controller 설치
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+
+# 로드 밸런서를 사용
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/baremetal/deploy.yaml
+
+# 노드 포트 사용
 ```
