@@ -9,11 +9,17 @@ tags: [kubernetes, k8s] # TAG는 반드시 소문자로 이루어져야함!
 
 *해당 게시글의 리눅스 버전 : Centos7* 
 
-```
-yum list --showduplicates kubeadm --disableexcludes=kubernetes
+## 마스터 및 노드 등록
 
-# 쿠버네티스 설치시 버전 확인
 ```
+ vi /etc/hosts
+```
+
+호스트 명칭은 뭐가 되어도 상관없다.
+
+![k8s](./assets/img/k8s/k8s01.png)
+
+## 레포지터리에 쿠버네티스 추가
 
 ```
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -25,46 +31,81 @@ gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 exclude=kubelet kubeadm kubectl
 EOF
+```
 
+## 방화벽 해제
+
+```
+sudo systemctl stop firewalld
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-
-sudo yum install -y kubelet-1.25.0 kubeadm-1.25.0 kubectl-1.25.0 --disableexcludes=kubernetes
-kubeadm init # 에러 발생
 ```
+
+## 방화벽 예외 설정
+
+마스터 노드(컨트롤 플레인)
+```
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+firewall-cmd --permanent --add-port=2379-2380/tcp
+firewall-cmd --permanent --add-port=6443/tcp
+firewall-cmd --permanent --add-port=10250/tcp
+firewall-cmd --permanent --add-port=10257/tcp
+firewall-cmd --permanent --add-port=10259/tcp
+```
+service = http<br/>
+service = https<br/>
+2379-2380/tcp = etcd 서버 클라이언트 API<br/>
+6443/tcp = 쿠버네티스 API 서버<br/>
+10250/tcp = Kubelet API<br/>
+10257/tcp = kube-controller-manager<br/>
+10259/tcp = kube-scheduler<br/>
+
+워커 노드
+```
+firewall-cmd --permanent --add-port=10250/tcp
+firewall-cmd --permanent --add-port=30000-32767/tcp
+```
+10250/tcp = Kubelet API<br/>
+30000-32767/tcp = NodePort 서비스<br/>
+
+## 쿠버네티스 인스톨
+
+```
+yum list --showduplicates kubeadm --disableexcludes=kubernetes
+```
+
+쿠버네티스 버전 확인, 버전을 설치시 버전을 따로 지정해주지 않는다면 가장 최신버전이 설치된다.
+
+![k8s](./assets/img/k8s/k8s02.png)
+
+만약 최신 버전을 설치 하고자 한다면 버전을 추가적으로 명시해줄 필요는 없지만 특정 버전을 설치하기 위해선 버전을 명시해줘야 한다.<br/>
+
+특히 최신 버전은 지원되는 플러그인이 적음으로 한 단계 낮은 버전을 선택 하는게 정신건강에 이롭다.
+
+## 쿠버네티스 버전 선택
+```
+sudo yum install -y kubelet-1.25.0 kubeadm-1.25.0 kubectl-1.25.0 --disableexcludes=kubernetes
+```
+
+## 쿠버네티스 버전 미선택
 ```
 yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-# 최신 버전 설치
 ```
+## 초기화 전 필요사항(1) - 스왑 해제 및 네트워크 등록
 
 ```
-[WARNING Swap]: swap is enabled; production deployments should disable swap unless testing the NodeSwap feature gate of the kubelet
-error execution phase preflight: [preflight] Some fatal errors occurred:
-
-swapoff -a
-```
-
-```
-[WARNING Service-Kubelet]: kubelet service is not enabled, please run 'systemctl enable kubelet.service'
-error execution phase preflight: [preflight] Some fatal errors occurred:
-
+swapoff -a # 스왑 메모리 해제
 systemctl enable --now kubelet
-```
-
-```
- [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables does not exist
-
- lsmod | grep br_netfilter # br_netfilter 모듈이 로드되었는지 확인
-
- cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
 modprobe overlay
 modprobe br_netfilter
-
-lsmod | grep br_netfilter # 재 확인
+ 
+lsmod | grep br_netfilter # br_netfilter 모듈이 로드되었는지 확인
 
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
@@ -72,15 +113,18 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
-sudo sysctl --system # 재부팅하지 않고 sysctl 파라미터 적용하기
+# 가상의 네트워크 브릿지 및 IP 테이블 등록
+
+sudo sysctl --system
+
+# 재부팅 없이 파라미터 등록
 ```
 
-```
-[ERROR CRI]: container runtime is not running: output: time="2023-01-10T10:54:43+09:00" level=fatal msg="unable to determine runtime API version: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing dial unix /var/run/containerd/containerd.sock: connect: no such file or directory\""
-, error: exit status 1
-[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
-To see the stack trace of this error execute with --v=5 or higher
+## 초기화 전 필요사항(2) - containerd 설치
 
+쿠버네티스 1.23버전 이후 부터는 쿠버네티스에서 공식적으로 도커를 지원하지 않게 됐다. 따라서 컨테이너 런타임이 존재해야 Kubelet 구동되는 만큼 대표적인 컨타이너 런타임 인터페이스(CRI) 중에서 containerd를 설치해서 사용한다.
+
+```
 yum update -y
 yum install -y yum-utils
 yum-config-manager \
@@ -89,56 +133,53 @@ yum-config-manager \
 
 yum install containerd.io
 vi /etc/containerd/config.toml
-ㄴ disabled_plugins = ["cri"] # 해당 라인 주석처리 또는 cri 삭제
+
+disabled_plugins = ["cri"] 주석처리
 ```
 
+docker-ce를 설치해도 containerd는 자동으로 설치된다.
+
+![k8s](./assets/img/k8s/k8s03.png)
+
+## 초기화 전 필요사항(3) - 환경 설정
+
+### 유저가 루트일 경우
 ```
-E0110 11:26:48.039705   32064 memcache.go:238] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp [::1]:8080: connect: connection refused
-The connection to the server localhost:8080 was refused - did you specify the right host or port?
-
-[마스터에서만 실행]
-export KUBECONFIG=/etc/kubernetes/admin.conf # 단 리부팅 시 해당 오류가 다시 발생한다. 따라서 재시작을 해도 문제가 없도록 아래 명령어를 추가로 입력.
-
+export KUBECONFIG=/etc/kubernetes/admin.conf
 vi ~/.bash_profile
-
+-----------------------------------
 # .bash_profile
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
         . ~/.bashrc
 fi
-# User specific environment and startup programs
 
 PATH=$PATH:$HOME/bin
 export PATH # 여기 까지가 파일 내용
-export KUBECONFIG=/etc/kubernetes/admin.conf # 기존 내용에 해당 줄 추가
+-----------------------------------
+export KUBECONFIG=/etc/kubernetes/admin.conf 
+# 기존 내용에 해당 라인 추가
+# 저장
 
-source ~/.bash_profile # 변경 사항 적용
+source ~/.bash_profile 
+# 변경 사항 적용
 ```
-
-```
-kubectl get nodes 
-
-# STATUS Not ready, Addon plugin의 부재로 not ready가 출력
-
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml
-```
+### 유저가 루트가 아닐 경우
 
 ```
-cni flannel CrashLoopBackOff 해결
-마스터 노드 모두 kubeadm reset
-마스터에서 kubeadm init --pod-network-cidr=10.244.0.0/16
-실행
-다시 조인
+$ mkdir ~/.kube
+$ sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+$ sudo chmod 644 ~/.kube/config
+$ sudo chown $(id -u):$(id -g) ~/.kube/config
+$ echo 'export KUBECONFIG="$HOME/.kube/config"' >> ~/.bashrc
 ```
 
-```No resources found in ingress-ngninx namespace.
+## 초기화(1.25버전 설치)
+```
+kubeadm init --pod-network-cidr=10.244.0.0/16
+```
+쿠버네티스의 Flannel add-on을 사용하기 위해서 위와 같이 초기화를 진행, 만약 Flannel을 사용하지 않는다면 사용하고자 하는 add-on의 공식문서를 참고해서 초기화를 진행하자.
 
-Ingress Controller 설치
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
-
-# 로드 밸런서를 사용
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/baremetal/deploy.yaml
-
-# 노드 포트 사용
+```
+kubectl get nodes
 ```

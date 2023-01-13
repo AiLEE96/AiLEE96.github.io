@@ -5,7 +5,7 @@ categories: [kubernetes]
 tags: [kubernetes, k8s] # TAG는 반드시 소문자로 이루어져야함!
 ---
 
-# kubernetes dashboard
+# kubernetes dashboard 설치하기
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
