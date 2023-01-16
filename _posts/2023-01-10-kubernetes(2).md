@@ -15,7 +15,7 @@ kubeadm으로 생성된 클러스터는 Container Network Interface(CNI)기반�
 
 대표적으로 Calico, Flannel, WeaveNet등 다양한 Add-on이 존재하며 그 중에서 Flannel을 설치해서 진행해보도록 하겠다.
 
-Flannel을 사용하기에 앞서 [쿠버네티스 다루기(1)](https://ailee96.github.io/posts/kubernetes(1)/)에서 진행했던 초기화를 진행해주지 않았더라면 아래 명령어를 입력해서 새롭게 초기화를 진행해주자.
+Flannel을 사용하기에 앞서 [쿠버네티스 다루기(1)](https://ailee96.github.io/posts/kubernetes(1)/#초기화)에서 진행했던 초기화를 진행해주지 않았더라면 아래 명령어를 입력해서 새롭게 초기화를 진행해주자.
 
 ```
 kubeadm init --pod-network-cidr=10.244.0.0/16
@@ -59,7 +59,7 @@ mkdir /k8s
 cd /k8s
 wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 
-# 편의상 yaml 파일을 보관해줄 폴더를 생성.
+# yaml 파일을 보관해줄 폴더를 생성.
 
 mv recommended.yaml kubernetes-dashboard.yaml 
 # 이름 변경(recommended.yaml -> kubernetes-dashboard.yaml), 공식 문서를 보고 참고했기 때문에 공식문서와 이름을 동일하게 변경 
@@ -68,39 +68,68 @@ mv recommended.yaml kubernetes-dashboard.yaml
 ## Node Port 설정
 
 ```
+vi kubernetes-dashboard.yaml
 ```
 
-## Ingress 설정
+![k8s](./assets/img/k8s/k8s09.png)
 
 ```
+type: NodePort
+  ports:
+    - nodePort: 30001 # 사용자가 원하는 포트 입력 30000-32767
+      ports: 9090 # 사용자가 원하는 포트 입력 (default : 80)
+      targetPort: 9090 # 사용자가 원하는 포트 입력(default : 443)
 ```
 
-
-
 ```
-kubectl get pod --all-namespaces
-kubectl -n kube-system describe po coredns-[파드명] # [파드명] 지우고 사용자의 파드 이름 입력
+kubectl apply -f kubernetes-dashboard.yaml
+kubectl get svc -n kubernetes-dashboard
 ```
 
-파드의 상세내용 중 하단에 이벤트 확인
+![k8s](./assets/img/k8s/k8s10.png)
+
+30001 이라는 포트를 외부에 노출, 사용자의 공인 IP:30001로 접속이 가능하다.
+
+온프레미스 환경에서 진행했다면 내 외부 아이피:30001, 클라우드 환경에서 진행했다면 퍼블릭 IP:30001로 접속이 가능하다.
+
+
+## Barer 토큰 생성
+
+쿠버네티스 대시보드 접근을 위한 토큰 생성
+
+### adminuser.yaml 생성
 
 ```
-  Warning  FailedCreatePodSandBox  2m34s (x5910 over 21h)  kubelet  (combined from similar events): Failed to create pod sandbox: rpc error: code = Unknown desc = faile        d to setup network for sandbox "7d4908f1695840757296e028c01935b7bcc3cea7f774de965c59c1af3bb965e2": plugin type="flannel" failed (add): open /run/flannel/subnet.env: no such file or directory
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
 
- crictl images # k8s 이미지 확인
-
- WARN[0000] image connect using default endpoints: [unix:///var/run/dockershim.sock unix:///run/containerd/containerd.sock unix:///run/crio/crio.sock unix:///var/run/cri        -dockerd.sock]. As the default settings are now deprecated, you should set the endpoint instead.
-ERRO[0000] unable to determine image API version: rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial unix /var/run/docke        rshim.sock: connect: no such file or directory"
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
 ```
+### kubernetes-dashboard.yaml 수정
 
-앤드 포인트가 dockershim.sock로 설정되어서 문제가 발생.
+![k8s](./assets/img/k8s/k8s14.png)
+
+모든 권한 부여. 원래는 이렇게 진행하면 안되나 편의상 위와 같이 진행.
 
 ```
-crictl config runtime-endpoint unix:///run/containerd/containerd.sock
-
-crictl config image-endpoint unix:///run/containerd/containerd.sock
+kubectl apply -f adminuser.yaml
+kubectl apply -f kubernetes-dashboard.yaml
+kubectl create sa admin-user -n kubernetes-dashboard
 ```
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/baremetal/deploy.yaml
-
-## 토큰 생성
+생성된 토큰 복사해서 적용.

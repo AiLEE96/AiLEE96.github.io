@@ -5,13 +5,17 @@ categories: [kubernetes]
 tags: [kubernetes, k8s] # TAG는 반드시 소문자로 이루어져야함!
 ---
 
-### 
+## ERROR: \$basearch 
 
+```
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch 
 
-https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64 변경.
+https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 
-### ERROR: WARNING Swap
+# \$basearch -> x86_64 변경
+```
+
+## ERROR: WARNING Swap
 
 ```
 [WARNING Swap]: swap is enabled; production deployments should disable swap unless testing the NodeSwap feature gate of the kubelet
@@ -20,15 +24,16 @@ error execution phase preflight: [preflight] Some fatal errors occurred:
 swapoff -a
 ```
 
-### ERROR [WARNING Service-Kubelet]
+## ERROR [WARNING Service-Kubelet]
 
 ```
 [WARNING Service-Kubelet]: kubelet service is not enabled, please run 'systemctl enable kubelet.service'
 error execution phase preflight: [preflight] Some fatal errors occurred:
 
 systemctl enable --now kubelet
+
 ```
-### ERROR [FileContent--proc-sys-net-bridge]
+## ERROR [FileContent--proc-sys-net-bridge]
 ```
 [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables does not exist
 
@@ -50,7 +55,8 @@ EOF
 
 sudo sysctl --system # 재부팅하지 않고 sysctl 파라미터 적용하기
 ```
-### ERROR [CRI]
+## ERROR [CRI]
+
 ```
 [ERROR CRI]: container runtime is not running: output: time="2023-01-10T10:54:43+09:00" level=fatal msg="unable to determine runtime API version: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing dial unix /var/run/containerd/containerd.sock: connect: no such file or directory\""
 , error: exit status 1
@@ -70,7 +76,7 @@ vi /etc/containerd/config.toml
 
 해당 에러는 컨테이너 런타임 부재로 발생하는 에러.
 
-### ERROR [couldn't get current server API group list: Get localhost]
+## ERROR [couldn't get current server API group list: Get localhost]
 
 ```
 E0110 11:26:48.039705   32064 memcache.go:238] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp [::1]:8080: connect: connection refused
@@ -97,35 +103,37 @@ source ~/.bash_profile # 변경 사항 적용
 
 리부팅 시 해당 오류가 다시 발생함으로 bash_profile에 꼭 등록해주자.
 
+
+## ERROR: STATUS Not ready
+
 ```
 kubectl get nodes 
-
-# STATUS Not ready, Addon plugin의 부재로 not ready가 출력
 
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml
 ```
 
+
+## ERROR: CNI flannel CrashLoopBackOff
+
 ```
-cni flannel CrashLoopBackOff 해결
-마스터 노드 모두 kubeadm reset
-마스터에서 kubeadm init --pod-network-cidr=10.244.0.0/16
-실행
-다시 조인
+kubeadm reset
+# 마스터, 노드 모두 실행
+
+kubeadm init --pod-network-cidr=10.244.0.0/16
+# 마스터에서 실행
+# 다시 조인
 ```
 
-```No resources found in ingress-ngninx namespace.
+## ERROR: No resources found in ingress-ngninx namespace.
 
-Ingress Controller 설치
+Ingress Controller 설치부재.
+
+### LoadBalncer
+```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+```
 
-# 로드 밸런서를 사용
-
+### NodePort
+```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/baremetal/deploy.yaml
-
-# 노드 포트 사용
-```
-
-### ERROR $basearch
-
-```
 ```

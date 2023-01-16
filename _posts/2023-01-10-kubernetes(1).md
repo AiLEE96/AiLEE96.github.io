@@ -142,7 +142,7 @@ disabled_plugins = ["cri"] # 해당 라인 주석처리
 만약 docker-ce를 설치했다면 containerd를 설치하는 과정을 진행하지 않아도 된다. docker-ce를 설치하는 과정에서 의존성 패키지로 containerd가 자동으로 설치된다.
 
 단, 컨테이너 런타임에 대한 수동 설정이 필요하다. 해당 내용은 
-[쿠버네티스 에러모음](https://ailee96.github.io/posts/kubernetes(4)/)에서 확인할 수 있다.
+[쿠버네티스 에러모음](https://ailee96.github.io/posts/kubernetes(5)/)에서 확인할 수 있다.
 
 ![k8s](./assets/img/k8s/k8s03.png)
 
@@ -187,7 +187,7 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
 
 ![k8s](./assets/img/k8s/k8s06.png)
 
-초기화가 끝나고 나면 출력되는 kubeadm join 토큰 전체를 복사해서 마스터가 아닌 사용자에 노드에서 해당 명령어를 입력시키면 기본적인 쿠버네티스 설정이 끝이난다. 
+초기화가 끝나고 나면 출력되는 kubeadm join 토큰 전체를 복사해서 마스터가 아닌 사용자의 노드에서 해당 명령어를 입력시키면 기본적인 쿠버네티스 설정이 끝이난다. 
 
 
 ```
@@ -196,7 +196,7 @@ kubectl get nodes
 
 ![k8s](./assets/img/k8s/k8s05.png)
 
-위 명령어를 입력했을 때 정상적으로 구동되는 모습을 확인할 수 있다. [kubernetes 다루기(2)](https://ailee96.github.io/posts/kubernetes(4)/)에선 Status의 상태를 NotReady에서 Ready로 변경하고 대시보드를 설치해보도록 하겠다.  
+위 명령어를 입력했을 때 정상적으로 구동되는 모습을 확인할 수 있다. [kubernetes 다루기(2)](https://ailee96.github.io/posts/kubernetes(2)/)에선 Status의 상태를 NotReady에서 Ready로 변경하고 대시보드를 설치해보도록 하겠다.  
 
 
 
