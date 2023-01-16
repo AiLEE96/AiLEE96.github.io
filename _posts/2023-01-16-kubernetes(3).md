@@ -1,7 +1,7 @@
 ---
 title: kubernetes 다루기(3)
 date: 2023-01-09 10:00:00 +09:00
-categories: [kubernetes]
+categories: [kubernetes, k8s]
 tags: [kubernetes], [k8s] # TAG는 반드시 소문자로 이루어져야함!
 ---
 

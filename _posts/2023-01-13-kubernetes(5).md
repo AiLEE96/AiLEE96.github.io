@@ -1,8 +1,8 @@
 ---
 title: kubernetes 에러 모음
-date: 2023-01-09 10:00:00 +09:00
-categories: [kubernetes]
-tags: [kubernetes, k8s] # TAG는 반드시 소문자로 이루어져야함!
+date: 2023-01-12 10:00:00 +09:00
+categories: [kubernetes, k8s]
+tags: [kubernetes] # TAG는 반드시 소문자로 이루어져야함!
 ---
 
 ## ERROR: \$basearch 
@@ -128,12 +128,14 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
 
 Ingress Controller 설치부재.
 
-### LoadBalncer
+LoadBalncer
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
-### NodePort
+NodePort
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/baremetal/deploy.yaml
 ```
+
+위 2가지 중 본인이 원하는걸로 적용.
