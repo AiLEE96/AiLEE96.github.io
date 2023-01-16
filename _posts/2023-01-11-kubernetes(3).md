@@ -5,7 +5,9 @@ categories: [kubernetes]
 tags: [kubernetes, k8s] # TAG는 반드시 소문자로 이루어져야함!
 ---
 
-# 완전 삭제
+# 쿠버네티스 완전 삭제
+
+*해당 게시글의 리눅스 버전 : Centos7*
 
 ```
 systemctl stop kubelet
