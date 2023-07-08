@@ -77,4 +77,4 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 kubectl get svc -n kubernetes-dashboard # kubernetes-dashboard 대신에 본인이 설정한 네임스페이스 입력.
 ```
-*로드밸런서 설정은 추후 업데이트 예정*
+*로드밸런서 설정은 추후 업데이트 예정 수정 전*
